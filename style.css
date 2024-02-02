@@ -79,11 +79,16 @@ body {
   font-size: 15px;
 }
 
+.type-of-movie input:focus {
+  background-color: rgb(21, 21, 100);
+  border-bottom: 2px solid white;
+}
+
 #section {
   display: flex;
   /* grid-template-columns: (4, 1fr);
   grid-template-rows: (3, 1fr); */
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
   /* background-color: rgb(47, 47, 124); */
   justify-content: space-around;
   /* align-items: center; */
