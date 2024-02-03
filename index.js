@@ -7,14 +7,13 @@ const NOW_SHOWING = document.querySelector("#now-playing");
 const UPCOMING = document.querySelector("#upcoming");
 
 const API_KEY = "fa30e22edc44fe4207fb5b197edf656e";
-console.log(API_KEY);
 const API_LINK =
   "https://api.themoviedb.org/3/person/popular?language=en-US&page=1";
-  const API_LINK1 =
+const API_LINK1 =
   "https://api.themoviedb.org/3/person/popular?language=en-US&page=5";
-  const API_LINK2 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=8";
-  const API_LINK3 =
+const API_LINK2 =
+  "https://api.themoviedb.org/3/person/popular?language=en-US&page=7";
+const API_LINK3 =
   "https://api.themoviedb.org/3/person/popular?language=en-US&page=9";
 const POPULAR_API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`;
 const TOP_RATED_API = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
@@ -44,15 +43,28 @@ const getMainMovie = function (url) {
                 known.poster_path
               }" alt="${known.title}" />
               <p>Title: ${known.title || known.name}</p>
-              <h4>Release date: ${known.release_date}</h4>
-              <a href="reviews.html?id=${known.id}&title=${known.title}" class="see-more">see more</a>
-              <!-- Add other properties as needed -->
+              <h4>Release date: ${
+                known.release_date ? known.release_date : "Not available"
+              }</h4>
+              <a href="reviews.html?id=${known.id}&title=${
+              known.title
+            }" class="see-more" data-movie-id="${known.id}">see more</a>
+              
             </div>
           `;
           })
           .join("");
 
         MAIN.insertAdjacentHTML("afterbegin", knownForHTML);
+      });
+      const seeMoreLinks = document.querySelectorAll(".see-more");
+      seeMoreLinks.forEach((link) => {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          const movieId = this.dataset.movieId;
+          // Navigate to the movie-details.html page with the movie ID as a query parameter
+          window.location.href = `reviews.html?id=${movieId}`;
+        });
       });
     })
     .catch((err) => console.error(err));
@@ -66,12 +78,22 @@ getMainMovie(API_LINK2);
 const getMovieBy = function (url) {
   fetch(url, options)
     .then((response) => {
-      if(!response.ok) {
-        throw new Error(`failed to fetch data ${response.status}`)
+      if (!response.ok) {
+        throw new Error(`failed to fetch data ${response.status}`);
       }
-      return response.json()})
+      return response.json();
+    })
     .then((data) => {
       if (!data) return;
+
+      if (!data || !Array.isArray(data.results) || data.results.length === 0) {
+        MAIN.innerHTML = `
+    <div class='error'>
+      <p class='error-message'>💥 No results found</p>
+    </div>
+    `;
+        return;
+      }
       data.results.forEach((movie) => {
         const html = `
           <div class="row">
@@ -83,13 +105,29 @@ const getMovieBy = function (url) {
                     : "./img/far-away.jpg"
                 }" alt="poster of a movie" />
                 <h3>Title: ${movie.title}</h3>
-                <h4>Release date: ${movie.release_date}</h4>
-                <a href="reviews.html?id=${movie.id}&title=${movie.title}" class="see-more">see more</a>
+                <h4>Release date: ${
+                  movie && movie.release_date
+                    ? movie.release_date
+                    : "Not available"
+                }</h4>
+                <a href="reviews.html?id=${movie.id}&title=${
+          movie.title
+        }" class="see-more" data-movie-id="${movie.id}">see more</a>
               </div>
             </div>
           </div>
         `;
         MAIN.insertAdjacentHTML("afterbegin", html);
+      });
+
+      const seeMoreLinks = document.querySelectorAll(".see-more");
+      seeMoreLinks.forEach((link) => {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          const movieId = this.dataset.movieId;
+          // Navigate to the movie-details.html page with the movie ID as a query parameter
+          window.location.href = `reviews.html?id=${movieId}`;
+        });
       });
       console.log(data);
     })
@@ -101,10 +139,9 @@ FORM.addEventListener("submit", (e) => {
   MAIN.innerHTML = "";
   const searchTerm = SEARCH.value.trim();
 
-  if (searchTerm.length === 0 || searchTerm === "" || searchTerm === null) {
+  if (!searchTerm) {
     MAIN.innerHTML = `
     <div class='error'>
-      <i class="fa-regular fa-triangle-exclamation" style="color: #e93535;"></i>
       <p class='error-message'>💥 No results found</p>
     </div>
     `;

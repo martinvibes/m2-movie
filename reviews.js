@@ -1,137 +1,86 @@
-const SEARCH = document.querySelector(".search");
-const FORM = document.querySelector("#form");
-const MAIN = document.querySelector("#section");
-const POPULAR = document.querySelector("#popular");
-const TOP_RATED = document.querySelector("#top-rated");
-const NOW_SHOWING = document.querySelector("#now-playing");
-const UPCOMING = document.querySelector("#upcoming");
+document.addEventListener("DOMContentLoaded", function () {
+  const getUrlParameter = (name) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  };
 
-const API_KEY = "fa30e22edc44fe4207fb5b197edf656e";
-console.log(API_KEY);
-const API_LINK =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=1";
-  const API_LINK1 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=5";
-  const API_LINK2 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=8";
-  const API_LINK3 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=9";
-const POPULAR_API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`;
-const TOP_RATED_API = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
-const UPCOMING_API = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}`;
-const NOW_PLAYING_API = `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}`;
-const SEARCH_API = `https://api.themoviedb.org/3/search/movie?&api_key=${API_KEY}&query=`;
+  // Get movie ID from URL
+  const movieId = getUrlParameter("id");
+  if (!movieId) {
+    console.error(`movieId is not found in the URL`);
+    return;
+  }
+  console.log(movieId);
 
-const options = {
-  method: "GET",
-  headers: {
-    accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYTMwZTIyZWRjNDRmZTQyMDdmYjViMTk3ZWRmNjU2ZSIsInN1YiI6IjY1YThkYmVhZjQ5NWVlMDEyZTQ2OGI2OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.jXOjCRGueiwmw2R3F7EwvtS-qby91SOv7NNESv7RyGM",
-  },
-};
+  const apiKey = "fa30e22edc44fe4207fb5b197edf656e";
+  const apiUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`;
 
-const getMainMovie = function (url) {
-  fetch(`${url}&api_key=${API_KEY}`, options)
-    .then((response) => response.json())
-    .then((data) => {
-      data.results.forEach((person) => {
-        const knownForHTML = person.known_for
-          .map((known) => {
-            return `
-            <div class="card">
-              <img src="https://image.tmdb.org/t/p/w500${
-                known.poster_path
-              }" alt="${known.title}" />
-              <p>Title: ${known.title || known.name}</p>
-              <h4>Release date: ${known.release_date}</h4>
-              <a href="reviews.html?id=${known.id}&title=${known.title}" class="see-more">see more</a>
-              <!-- Add other properties as needed -->
-            </div>
-          `;
-          })
-          .join("");
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+  };
 
-        MAIN.insertAdjacentHTML("afterbegin", knownForHTML);
-      });
-    })
-    .catch((err) => console.error(err));
-};
-
-getMainMovie(API_LINK);
-getMainMovie(API_LINK1);
-getMainMovie(API_LINK2);
-// getMainMovie(API_LINK3);
-
-const getMovieBy = function (url) {
-  fetch(url, options)
+  fetch(apiUrl, options)
     .then((response) => {
-      if(!response.ok) {
-        throw new Error(`failed to fetch data ${response.status}`)
+      if (!response.ok) {
+        throw new Error(`failed to fetch movieDetails ${response.status}`);
       }
-      return response.json()})
-    .then((data) => {
-      if (!data) return;
-      data.results.forEach((movie) => {
-        const html = `
-          <div class="row">
-            <div class="column">
-              <div class="card">
-                <img src="${
-                  movie && movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : "./img/far-away.jpg"
-                }" alt="poster of a movie" />
-                <h3>Title: ${movie.title}</h3>
-                <h4>Release date: ${movie.release_date}</h4>
-                <a href="reviews.html?id=${movie.id}&title=${movie.title}" class="see-more">see more</a>
-              </div>
-            </div>
-          </div>
-        `;
-        MAIN.insertAdjacentHTML("afterbegin", html);
-      });
-      console.log(data);
+      return response.json();
     })
-    .catch((err) => console.error(err));
-};
-
-FORM.addEventListener("submit", (e) => {
-  e.preventDefault();
-  MAIN.innerHTML = "";
-  const searchTerm = SEARCH.value.trim();
-
-  if (searchTerm.length === 0 || searchTerm === "" || searchTerm === null) {
-    MAIN.innerHTML = `
-    <div class='error'>
-      <i class="fa-regular fa-triangle-exclamation" style="color: #e93535;"></i>
-      <p class='error-message'>💥 No results found</p>
-    </div>
-    `;
-  }
-
-  if (searchTerm !== "") {
-    getMovieBy(SEARCH_API + encodeURIComponent(searchTerm));
-  }
-  SEARCH.value = "";
-});
-
-POPULAR.addEventListener("click", () => {
-  MAIN.innerHTML = "";
-  getMovieBy(POPULAR_API_URL);
-});
-
-TOP_RATED.addEventListener("click", () => {
-  MAIN.innerHTML = "";
-  getMovieBy(TOP_RATED_API);
-});
-
-NOW_SHOWING.addEventListener("click", () => {
-  MAIN.innerHTML = "";
-  getMovieBy(NOW_PLAYING_API);
-});
-
-UPCOMING.addEventListener("click", () => {
-  MAIN.innerHTML = "";
-  getMovieBy(UPCOMING_API);
+    .then((movieDetails) => {
+      console.log(movieDetails);
+      // Display movie details on the page
+      const detailsContainer = document.getElementById("section");
+      detailsContainer.innerHTML = `
+             
+           <div class="reviews-page">
+               <div class="card">
+                 <img src="${
+                   movieDetails && movieDetails.poster_path
+                     ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                     : "./img/image-not-found.png"
+                 }" alt="poster of a movie" />
+                 <h3><span>Title:</span> ${movieDetails.title}</h3>
+                 </div>
+                 
+                 <div class="reviews">
+               <h1><u> OverView </u></h1>
+               <p>${movieDetails.overview}</p>
+               <h4><span>Release Date:</span> ${
+                 movieDetails && movieDetails.release_date
+                   ? movieDetails.release_date
+                   : "Not available"
+               }</h4>
+               <h4><span>Spoken Languages:</span> ${movieDetails.spoken_languages.map(
+                 (lang) => {
+                  return [lang.name, lang.iso_639_1].join(', ')
+                }
+               )}</h4>
+               <h4><span>Video:</span> ${movieDetails.video}</h4>
+               <h4><span>Genres:</span> ${movieDetails.genres
+                 .map((genre) => genre.name)
+                 .join(", ")}</h4>
+               <h4><span>Status:</span> ${movieDetails.status}</h4>
+               <h4><span>Runtime:</span> ${Math.trunc(
+                 movieDetails.runtime / 60
+               )}h ${movieDetails.runtime % 60}min</h4>
+               <h4><span>Is movie for adult:</span> ${
+                 !movieDetails.adult ? "for all age" : movieDetails.adult
+               }</h4>
+               <h4><span>Production companies:</span> ${movieDetails.production_companies
+                 .map((comp) => comp.name)
+                 .join(", ")}</h4>
+               <h4><a href="${movieDetails.homepage}">Link to the site</a></h4>
+               
+           </div>
+          </div>
+          `;
+    })
+    .catch((error) => {
+      console.error(error);
+      alert(error.message, error);
+    });
 });
