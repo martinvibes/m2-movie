@@ -30,7 +30,18 @@ const options = {
   },
 };
 
+const showSpinner = () => {
+  const spinner = document.querySelector(".spinner");
+  spinner.style.display = "block";
+};
+
+const hideSpinner = () => {
+  const spinner = document.querySelector(".spinner");
+  spinner.style.display = "none";
+};
+
 const getMainMovie = function (url) {
+  showSpinner();
   fetch(`${url}&api_key=${API_KEY}`, options)
     .then((response) => response.json())
     .then((data) => {
@@ -55,7 +66,7 @@ const getMainMovie = function (url) {
           })
           .join("");
 
-        MAIN.insertAdjacentHTML("afterbegin", knownForHTML);
+        MAIN.insertAdjacentHTML("beforeend", knownForHTML);
       });
       const seeMoreLinks = document.querySelectorAll(".see-more");
       seeMoreLinks.forEach((link) => {
@@ -66,6 +77,7 @@ const getMainMovie = function (url) {
           window.location.href = `reviews.html?id=${movieId}`;
         });
       });
+      hideSpinner();
     })
     .catch((err) => console.error(err));
 };
@@ -76,6 +88,7 @@ getMainMovie(API_LINK2);
 // getMainMovie(API_LINK3);
 
 const getMovieBy = function (url) {
+  showSpinner();
   fetch(url, options)
     .then((response) => {
       if (!response.ok) {
@@ -87,9 +100,13 @@ const getMovieBy = function (url) {
       if (!data) return;
 
       if (!data || !Array.isArray(data.results) || data.results.length === 0) {
+        hideSpinner();
         MAIN.innerHTML = `
     <div class='error'>
-      <p class='error-message'>💥 No results found</p>
+    <svg>
+      <use href="./img/icons.svg#icon-alert-triangle"></use>
+     </svg>
+    <p class='error-message'>No results found</p>
     </div>
     `;
         return;
@@ -117,7 +134,7 @@ const getMovieBy = function (url) {
             </div>
           </div>
         `;
-        MAIN.insertAdjacentHTML("afterbegin", html);
+        MAIN.insertAdjacentHTML("beforeend", html);
       });
 
       const seeMoreLinks = document.querySelectorAll(".see-more");
@@ -130,6 +147,7 @@ const getMovieBy = function (url) {
         });
       });
       console.log(data);
+      hideSpinner();
     })
     .catch((err) => console.error(err));
 };
@@ -141,8 +159,11 @@ FORM.addEventListener("submit", (e) => {
 
   if (!searchTerm) {
     MAIN.innerHTML = `
-    <div class='error'>
-      <p class='error-message'>💥 No results found</p>
+    <div class="error">
+      <svg>
+        <use href="./img/icons.svg#icon-alert-triangle"></use>
+      </svg>
+      <p class='error-message'> Please enter a search term</p>
     </div>
     `;
   }
@@ -171,4 +192,21 @@ NOW_SHOWING.addEventListener("click", () => {
 UPCOMING.addEventListener("click", () => {
   MAIN.innerHTML = "";
   getMovieBy(UPCOMING_API);
+});
+
+window.addEventListener("scroll", () => {
+  const topNav = document.querySelector(".top-nav");
+  const navLink = document.querySelector(".nav-link");
+  const scrollHeight = window.pageYOffset;
+  const navHeight = topNav.getBoundingClientRect().height;
+  if (scrollHeight > navHeight) {
+    topNav.classList.add("fixed-nav");
+  } else {
+    topNav.classList.remove("fixed-nav");
+  }
+  if (scrollHeight > 500) {
+    navLink.classList.add("show-link");
+  } else {
+    navLink.classList.remove("show-link");
+  }
 });
