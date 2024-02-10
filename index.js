@@ -5,16 +5,10 @@ const POPULAR = document.querySelector("#popular");
 const TOP_RATED = document.querySelector("#top-rated");
 const NOW_SHOWING = document.querySelector("#now-playing");
 const UPCOMING = document.querySelector("#upcoming");
+const pagination = document.querySelector(".pagination");
+
 
 const API_KEY = "fa30e22edc44fe4207fb5b197edf656e";
-const API_LINK =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=1";
-const API_LINK1 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=5";
-const API_LINK2 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=7";
-const API_LINK3 =
-  "https://api.themoviedb.org/3/person/popular?language=en-US&page=9";
 const POPULAR_API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`;
 const TOP_RATED_API = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
 const UPCOMING_API = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}`;
@@ -40,18 +34,28 @@ const hideSpinner = () => {
   spinner.style.display = "none";
 };
 
+let curPage = 1;
 const getMainMovie = function (url) {
   showSpinner();
-  fetch(`${url}&api_key=${API_KEY}`, options)
-    .then((response) => response.json())
+  const API_LINK = `https://api.themoviedb.org/3/person/popular?language=en-US&page=${curPage}&api_key=${API_KEY}`;
+
+  fetch(API_LINK, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch movies", response.status);
+      }
+
+      return response.json();
+    })
     .then((data) => {
+      if (!data) return;
+
       data.results.forEach((person) => {
         const knownForHTML = person.known_for
-          .map((known) => {
+        .map((known) => {
             return `
             <div class="card">
-              <img src="https://image.tmdb.org/t/p/w500${
-                known.poster_path
+            <img src="${person && known.poster_path ? `https://image.tmdb.org/t/p/w500${known.poster_path}` : './img/far-away.jpg'
               }" alt="${known.title}" />
               <p>Title: ${known.title || known.name}</p>
               <h4>Release date: ${
@@ -66,8 +70,8 @@ const getMainMovie = function (url) {
           })
           .join("");
 
-        MAIN.insertAdjacentHTML("beforeend", knownForHTML);
-      });
+          MAIN.insertAdjacentHTML("beforeend", knownForHTML);
+        });
       const seeMoreLinks = document.querySelectorAll(".see-more");
       seeMoreLinks.forEach((link) => {
         link.addEventListener("click", function (event) {
@@ -77,17 +81,72 @@ const getMainMovie = function (url) {
           window.location.href = `reviews.html?id=${movieId}`;
         });
       });
-      hideSpinner();
+      
+    //  prevButton.style.display = "inline-block";
+    //  nextButton.style.display = "inline-block";
+    
+    updatePaginationButtons();
+    hideSpinner();
     })
-    .catch((err) => console.error(err));
-};
+    .catch((err) => {
+      console.error(err);
+    });
+  };
+  
+  const prevButton = document.querySelector(".pagination-prev");
+  const nextButton = document.querySelector(".pagination-next");
+  const prev_page_number = document.querySelector(".prev");
+  const next_page_number = document.querySelector(".next");
+  
+  // Function to update pagination buttons based on current page
+  const updatePaginationButtons = () => {
+    prev_page_number.textContent = curPage - 1
+    next_page_number.textContent = curPage + 1
 
-getMainMovie(API_LINK);
-getMainMovie(API_LINK1);
-getMainMovie(API_LINK2);
-// getMainMovie(API_LINK3);
+    // If current page is 1, only show next button
+    if (curPage === 1) {
+      pagination.classList.add('see_pagination')
+      nextButton.style.display = "inline-block";
+    } 
+    // If current page is greater than 1 and not the last page, show both buttons
+    else if (curPage > 1 && curPage < 100) {
+      prevButton.style.display = "inline-block";
+      nextButton.style.display = "inline-block";
+    } 
+    // If current page is the last page, show only prev button
+    else if (curPage === 100) {
+      prevButton.style.display = "inline-block";
+    }
+  };
+  
+  // Function to handle next page click
+  const nextPageClick = () => {
+    MAIN.innerHTML = "";
+    curPage++;
+    console.log(curPage);
+    getMainMovie(curPage);
+    updatePaginationButtons();
+  };
+  
+  // Function to handle previous page click
+  const prevPageClick = () => {
+    if (curPage > 1) {
+      MAIN.innerHTML = "";
+      curPage--;
+      console.log(curPage);
+      getMainMovie(curPage);
+      updatePaginationButtons();
+    }
+  };
+  
+  getMainMovie(curPage)
+  // Event listeners for pagination buttons
+  prevButton.addEventListener("click", prevPageClick);
+  nextButton.addEventListener("click", nextPageClick);
+  
 
 const getMovieBy = function (url) {
+  pagination.style.display = 'none'
   showSpinner();
   fetch(url, options)
     .then((response) => {
@@ -100,27 +159,29 @@ const getMovieBy = function (url) {
       if (!data) return;
 
       if (!data || !Array.isArray(data.results) || data.results.length === 0) {
-        hideSpinner();
+        MAIN.innerHTML = "";
+        hideSpinner()
+        pagination.style.display = 'none'
         MAIN.innerHTML = `
-    <div class='error'>
-    <svg>
-      <use href="./img/icons.svg#icon-alert-triangle"></use>
-     </svg>
-    <p class='error-message'>No results found</p>
-    </div>
-    `;
+        <div class='error'>
+        <svg>
+        <use href="./img/icons.svg#icon-alert-triangle"></use>
+        </svg>
+        <p class='error-message'>No results found</p>
+        </div>
+        `;
         return;
       }
       data.results.forEach((movie) => {
         const html = `
-          <div class="row">
+        <div class="row">
             <div class="column">
               <div class="card">
-                <img src="${
-                  movie && movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : "./img/far-away.jpg"
-                }" alt="poster of a movie" />
+              <img src="${
+                movie && movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                  : "./img/far-away.jpg"
+              }" alt="poster of a movie" />
                 <h3>Title: ${movie.title}</h3>
                 <h4>Release date: ${
                   movie && movie.release_date
@@ -158,6 +219,8 @@ FORM.addEventListener("submit", (e) => {
   const searchTerm = SEARCH.value.trim();
 
   if (!searchTerm) {
+    MAIN.innerHTML = "";
+    pagination.style.display = 'none'
     MAIN.innerHTML = `
     <div class="error">
       <svg>
@@ -175,6 +238,7 @@ FORM.addEventListener("submit", (e) => {
 });
 
 POPULAR.addEventListener("click", () => {
+  nextButton.style.display = 'none'
   MAIN.innerHTML = "";
   getMovieBy(POPULAR_API_URL);
 });
@@ -210,3 +274,5 @@ window.addEventListener("scroll", () => {
     navLink.classList.remove("show-link");
   }
 });
+
+

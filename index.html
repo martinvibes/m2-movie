@@ -13,15 +13,14 @@
   <body>
     <div id="up-link">
       <div class="top-nav">
-      <h1>
-        <a href="">m<sup class="upper">2</sup> movie</a>
-      </h1>
-      <form id="form" action="" role="search">
-        <input class="search" type="search" placeholder="search..." />
-      </form>
+        <h1>
+          <a href="">m<sup class="upper">2</sup> movie</a>
+        </h1>
+        <form id="form" action="" role="search">
+          <input class="search" type="search" placeholder="search..." />
+        </form>
+      </div>
     </div>
-  </div>
-    
 
     <div class="type-of-movie">
       <input id="popular" type="button" value="popular" />
@@ -51,5 +50,21 @@
       <a href="#up-link">⇮</a>
     </div>
 
+    <div class="pagination">
+      <div class="pagination-inner">
+        <button class="btn--inline pagination-prev">
+          <svg class="search__icon">
+            <use href="./img/icons.svg#icon-arrow-left"></use>
+          </svg>
+          <span>Page <span class="prev">0</span></span>
+        </button>
+        <button class="btn--inline pagination-next">
+          <span>Page <span class="next">2</span></span>
+          <svg class="search__icon">
+            <use href="./img/icons.svg#icon-arrow-right"></use>
+          </svg>
+        </button>
+      </div>
+    </div>
   </body>
 </html>
