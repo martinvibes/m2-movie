@@ -60,9 +60,11 @@ const getMainMovie = function (url) {
                 : "./img/far-away.jpg"
             }" alt="${known.title}" />
               <p>Title: ${
-                known.title
+                known.title && known.title.split(" ").length > 20
+                  ? known.title
+                  : known.title && known.title.length > 20
                   ? known.title.substring(0, 20) + "..."
-                  : known.name + "...."
+                  : known.title || known.name
               }</p>
               <h4>Release date: ${
                 known.release_date ? known.release_date : "Not available"
@@ -190,9 +192,11 @@ const getMovieBy = function (url) {
                   : "./img/far-away.jpg"
               }" alt="poster of a movie" />
                 <h3>Title: ${
-                  movie.title
-                    ? movie.title.substring(0, 20) + "...."
-                    : movie.name + "...."
+                  movie.title && movie.title.split(" ").length > 20
+                    ? movie.title
+                    : movie.title && movie.title.length > 20
+                    ? movie.title.substring(0, 20) + "..."
+                    : movie.title || movie.name
                 }</h3>
                 <h4>Release date: ${
                   movie && movie.release_date
