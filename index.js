@@ -7,7 +7,6 @@ const NOW_SHOWING = document.querySelector("#now-playing");
 const UPCOMING = document.querySelector("#upcoming");
 const pagination = document.querySelector(".pagination");
 
-
 const API_KEY = "fa30e22edc44fe4207fb5b197edf656e";
 const POPULAR_API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`;
 const TOP_RATED_API = `https://api.themoviedb.org/3/movie/top_rated?api_key=${API_KEY}`;
@@ -52,12 +51,19 @@ const getMainMovie = function (url) {
 
       data.results.forEach((person) => {
         const knownForHTML = person.known_for
-        .map((known) => {
+          .map((known) => {
             return `
             <div class="card">
-            <img src="${person && known.poster_path ? `https://image.tmdb.org/t/p/w500${known.poster_path}` : './img/far-away.jpg'
-              }" alt="${known.title}" />
-              <p>Title: ${known.title || known.name}</p>
+            <img src="${
+              person && known.poster_path
+                ? `https://image.tmdb.org/t/p/w500${known.poster_path}`
+                : "./img/far-away.jpg"
+            }" alt="${known.title}" />
+              <p>Title: ${
+                known.title
+                  ? known.title.substring(0, 20) + "..."
+                  : known.name + "...."
+              }</p>
               <h4>Release date: ${
                 known.release_date ? known.release_date : "Not available"
               }</h4>
@@ -70,85 +76,84 @@ const getMainMovie = function (url) {
           })
           .join("");
 
-          MAIN.insertAdjacentHTML("beforeend", knownForHTML);
-        });
+        MAIN.insertAdjacentHTML("beforeend", knownForHTML);
+      });
       const seeMoreLinks = document.querySelectorAll(".see-more");
       seeMoreLinks.forEach((link) => {
         link.addEventListener("click", function (event) {
           event.preventDefault();
           const movieId = this.dataset.movieId;
           const currentPageUrl = window.location.href;
-          localStorage.setItem('selectedMovieId', movieId);
-          localStorage.setItem('currentPageUrl', currentPageUrl);
+          localStorage.setItem("selectedMovieId", movieId);
+          localStorage.setItem("currentPageUrl", currentPageUrl);
           window.location.href = `reviews.html?id=${movieId}`;
         });
       });
-      
-    //  prevButton.style.display = "inline-block";
-    //  nextButton.style.display = "inline-block";
-    
-    updatePaginationButtons();
-    hideSpinner();
+
+      //  prevButton.style.display = "inline-block";
+      //  nextButton.style.display = "inline-block";
+
+      updatePaginationButtons();
+      hideSpinner();
     })
     .catch((err) => {
       console.error(err);
     });
-  };
-  
-  const prevButton = document.querySelector(".pagination-prev");
-  const nextButton = document.querySelector(".pagination-next");
-  const prev_page_number = document.querySelector(".prev");
-  const next_page_number = document.querySelector(".next");
-  
-  // Function to update pagination buttons based on current page
-  const updatePaginationButtons = () => {
-    prev_page_number.textContent = curPage - 1
-    next_page_number.textContent = curPage + 1
+};
 
-    // If current page is 1, only show next button
-    if (curPage === 1) {
-      pagination.classList.add('see_pagination')
-      nextButton.style.display = "inline-block";
-    } 
-    // If current page is greater than 1 and not the last page, show both buttons
-    else if (curPage > 1 && curPage < 100) {
-      prevButton.style.display = "inline-block";
-      nextButton.style.display = "inline-block";
-    } 
-    // If current page is the last page, show only prev button
-    else if (curPage === 100) {
-      prevButton.style.display = "inline-block";
-    }
-  };
-  
-  // Function to handle next page click
-  const nextPageClick = () => {
+const prevButton = document.querySelector(".pagination-prev");
+const nextButton = document.querySelector(".pagination-next");
+const prev_page_number = document.querySelector(".prev");
+const next_page_number = document.querySelector(".next");
+
+// Function to update pagination buttons based on current page
+const updatePaginationButtons = () => {
+  prev_page_number.textContent = curPage - 1;
+  next_page_number.textContent = curPage + 1;
+
+  // If current page is 1, only show next button
+  if (curPage === 1) {
+    pagination.classList.add("see_pagination");
+    nextButton.style.display = "inline-block";
+  }
+  // If current page is greater than 1 and not the last page, show both buttons
+  else if (curPage > 1 && curPage < 100) {
+    prevButton.style.display = "inline-block";
+    nextButton.style.display = "inline-block";
+  }
+  // If current page is the last page, show only prev button
+  else if (curPage === 100) {
+    prevButton.style.display = "inline-block";
+  }
+};
+
+// Function to handle next page click
+const nextPageClick = () => {
+  MAIN.innerHTML = "";
+  curPage++;
+  console.log(curPage);
+  getMainMovie(curPage);
+  updatePaginationButtons();
+};
+
+// Function to handle previous page click
+const prevPageClick = () => {
+  if (curPage > 1) {
     MAIN.innerHTML = "";
-    curPage++;
+    curPage--;
     console.log(curPage);
     getMainMovie(curPage);
     updatePaginationButtons();
-  };
-  
-  // Function to handle previous page click
-  const prevPageClick = () => {
-    if (curPage > 1) {
-      MAIN.innerHTML = "";
-      curPage--;
-      console.log(curPage);
-      getMainMovie(curPage);
-      updatePaginationButtons();
-    }
-  };
-  
-  getMainMovie(curPage)
-  // Event listeners for pagination buttons
-  prevButton.addEventListener("click", prevPageClick);
-  nextButton.addEventListener("click", nextPageClick);
-  
+  }
+};
+
+getMainMovie(curPage);
+// Event listeners for pagination buttons
+prevButton.addEventListener("click", prevPageClick);
+nextButton.addEventListener("click", nextPageClick);
 
 const getMovieBy = function (url) {
-  pagination.style.display = 'none'
+  pagination.style.display = "none";
   showSpinner();
   fetch(url, options)
     .then((response) => {
@@ -162,8 +167,8 @@ const getMovieBy = function (url) {
 
       if (!data || !Array.isArray(data.results) || data.results.length === 0) {
         MAIN.innerHTML = "";
-        hideSpinner()
-        pagination.style.display = 'none'
+        hideSpinner();
+        pagination.style.display = "none";
         MAIN.innerHTML = `
         <div class='error'>
         <svg>
@@ -184,7 +189,11 @@ const getMovieBy = function (url) {
                   ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                   : "./img/far-away.jpg"
               }" alt="poster of a movie" />
-                <h3>Title: ${movie.title}</h3>
+                <h3>Title: ${
+                  movie.title
+                    ? movie.title.substring(0, 20) + "...."
+                    : movie.name + "...."
+                }</h3>
                 <h4>Release date: ${
                   movie && movie.release_date
                     ? movie.release_date
@@ -206,8 +215,8 @@ const getMovieBy = function (url) {
           event.preventDefault();
           const movieId = this.dataset.movieId;
           const currentPageUrl = window.location.href;
-          localStorage.setItem('selectedMovieId', movieId);
-          localStorage.setItem('currentPageUrl', currentPageUrl);
+          localStorage.setItem("selectedMovieId", movieId);
+          localStorage.setItem("currentPageUrl", currentPageUrl);
           window.location.href = `reviews.html?id=${movieId}`;
         });
       });
@@ -224,7 +233,7 @@ FORM.addEventListener("submit", (e) => {
 
   if (!searchTerm) {
     MAIN.innerHTML = "";
-    pagination.style.display = 'none'
+    pagination.style.display = "none";
     MAIN.innerHTML = `
     <div class="error">
       <svg>
@@ -242,7 +251,7 @@ FORM.addEventListener("submit", (e) => {
 });
 
 POPULAR.addEventListener("click", () => {
-  nextButton.style.display = 'none'
+  nextButton.style.display = "none";
   MAIN.innerHTML = "";
   getMovieBy(POPULAR_API_URL);
 });
@@ -278,5 +287,3 @@ window.addEventListener("scroll", () => {
     navLink.classList.remove("show-link");
   }
 });
-
-
