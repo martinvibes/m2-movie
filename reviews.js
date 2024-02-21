@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error(`movieId is not found in the URL`);
     return;
   }
-  console.log(movieId);
 
   const apiKey = "fa30e22edc44fe4207fb5b197edf656e";
   const apiUrl = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`;
@@ -73,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                <h4><span>Production companies:</span> ${movieDetails.production_companies
                  .map((comp) => comp.name)
                  .join(", ")}</h4>
-               <h4><a href="${movieDetails.homepage}">Link to the site</a></h4>
+               <h4><a href="${movieDetails.homepage}" target="_blank">Link to the site</a></h4>
                
            </div>
           </div>
@@ -83,4 +82,23 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error(error);
       alert(error.message, error);
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const backButton = document.getElementById('backButton');
+  backButton.addEventListener('click', () => {
+    const selectedMovieId = localStorage.getItem('selectedMovieId');
+    const currentPageUrl = localStorage.getItem('currentPageUrl');
+    if (currentPageUrl && selectedMovieId) {
+      window.location.href = currentPageUrl;
+      localStorage.removeItem('selectedMovieId');
+      localStorage.removeItem('currentPageUrl');
+      setTimeout(() => {
+        const selectedMovieSeeMore = document.querySelector(`.see-more[data-movie-id="${selectedMovieId}"]`);
+        if (selectedMovieSeeMore) {
+          selectedMovieSeeMore.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1000); // Adjust delay as needed
+    }
+  });
 });

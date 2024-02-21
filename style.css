@@ -195,14 +195,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
 
-  svg {
-    height: 3rem;
-    width: 3rem;
-    fill: rgb(219, 63, 63);
-    transform: translateY(-0.3rem);
-    margin-right: 15px;
-  }
+.error svg {
+  height: 3rem;
+  width: 3rem;
+  fill: rgb(219, 63, 63);
+  transform: translateY(-0.3rem);
+  margin-right: 15px;
 }
 
 .card {
@@ -251,7 +251,7 @@ body {
   justify-content: center;
   align-items: center;
   background-color: rgba(55, 63, 180, 0.3);
-  padding: 20px;
+  padding: 15px;
   width: fit-content;
   border-radius: 1em;
   /* display: none; */
@@ -259,11 +259,11 @@ body {
 
 .btn--inline {
   color: #f38e82;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   border: none;
   background-color: #f9f5f3;
-  padding: 0.7rem 1.2rem;
+  padding: 0.5rem 0.8rem;
   border-radius: 1rem;
   cursor: pointer;
 
@@ -272,7 +272,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.5s;
-  margin: 0 40px;
+  margin: 0 35px;
 }
 
 .btn--inline:hover {

@@ -77,7 +77,9 @@ const getMainMovie = function (url) {
         link.addEventListener("click", function (event) {
           event.preventDefault();
           const movieId = this.dataset.movieId;
-          // Navigate to the movie-details.html page with the movie ID as a query parameter
+          const currentPageUrl = window.location.href;
+          localStorage.setItem('selectedMovieId', movieId);
+          localStorage.setItem('currentPageUrl', currentPageUrl);
           window.location.href = `reviews.html?id=${movieId}`;
         });
       });
@@ -203,7 +205,9 @@ const getMovieBy = function (url) {
         link.addEventListener("click", function (event) {
           event.preventDefault();
           const movieId = this.dataset.movieId;
-          // Navigate to the movie-details.html page with the movie ID as a query parameter
+          const currentPageUrl = window.location.href;
+          localStorage.setItem('selectedMovieId', movieId);
+          localStorage.setItem('currentPageUrl', currentPageUrl);
           window.location.href = `reviews.html?id=${movieId}`;
         });
       });
