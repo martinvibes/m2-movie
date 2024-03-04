@@ -254,6 +254,65 @@ FORM.addEventListener("submit", (e) => {
   SEARCH.value = "";
 });
 
+// const searchTerm = SEARCH.value;
+// const suggestion = function (value) {
+//   fetch(
+//     `https://api.themoviedb.org/3/search/movie?&api_key=${API_KEY}&query=${value}`
+//   )
+//     .then((res) => res.json())
+//     .then((data) => {
+//       const datalist = document.getElementById("suggestions");
+//       // data.results.forEach((suggest) => {
+//       //   const option = document.createElement("option");
+//       //   option.value = suggest.title;
+//       //   datalist.appendChild(option);
+//       // });
+//       // console.log(data);
+
+//       // part 2
+//       const results = data.results.filter((search) => {
+//         // return (
+//         //   value &&
+//         //   search &&
+//         //   search.title &&
+//         //   search.title.toLowerCase().includes(value)
+//         // );
+//         console.log(search);
+//       });
+//       console.log(results);
+//     })
+//     .catch((err) => console.log(err));
+// };
+
+// SEARCH.addEventListener("input", () => {
+//   suggestion(searchTerm);
+// });
+
+const suggestion = async function (value) {
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?&api_key=${API_KEY}&query=${value}`
+    );
+    const data = await response.json();
+
+    const datalist = document.getElementById("suggestions");
+    // Clear previous suggestions
+    datalist.innerHTML = "";
+    data.results.forEach((suggest) => {
+      const option = document.createElement("option");
+      option.value = suggest.title;
+      datalist.appendChild(option);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+SEARCH.addEventListener("input", () => {
+  const searchTerm = SEARCH.value.trim();
+  suggestion(searchTerm);
+});
+
 POPULAR.addEventListener("click", () => {
   nextButton.style.display = "none";
   MAIN.innerHTML = "";
