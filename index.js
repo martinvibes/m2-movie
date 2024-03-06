@@ -1,4 +1,5 @@
 const SEARCH = document.querySelector(".search");
+const SEARCH_ICON = document.querySelector(".s-icon");
 const FORM = document.querySelector("#form");
 const MAIN = document.querySelector("#section");
 const POPULAR = document.querySelector("#popular");
@@ -230,7 +231,7 @@ const getMovieBy = function (url) {
     .catch((err) => console.error(err));
 };
 
-FORM.addEventListener("submit", (e) => {
+const summitSearch = (e) => {
   e.preventDefault();
   MAIN.innerHTML = "";
   const searchTerm = SEARCH.value.trim();
@@ -252,7 +253,10 @@ FORM.addEventListener("submit", (e) => {
     getMovieBy(SEARCH_API + encodeURIComponent(searchTerm));
   }
   SEARCH.value = "";
-});
+};
+
+FORM.addEventListener("submit", summitSearch);
+SEARCH_ICON.addEventListener("click", summitSearch);
 
 // const searchTerm = SEARCH.value;
 // const suggestion = function (value) {

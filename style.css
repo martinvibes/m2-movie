@@ -43,17 +43,30 @@ body {
 }
 
 .top-nav form {
-  background-color: transparent;
-  width: 200px;
-  padding: 10px;
+  background-color: rgb(12, 12, 66);
+  padding: 2px;
   border-radius: 10px;
+}
+
+#form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.s-icon svg {
+  border-left: 2px solid rgb(21, 21, 100);
+  padding-left: 3px;
+  fill: green;
+  height: 1.6rem;
+  width: 1.6rem;
 }
 
 .top-nav form input {
   border-radius: 10px;
   background-color: rgb(12, 12, 66);
   color: whitesmoke;
-  padding: 10px;
+  padding: 8px;
   border: none;
   outline: none;
 }
@@ -514,11 +527,26 @@ body {
   }
 }
 
+@media (max-width: 420px) {
+  .top-nav form input {
+    width: 150px;
+    padding: 7px;
+  }
+}
+
 @media (max-width: 380px) {
   .see_pagination {
     margin: 15px 15px 25px;
     visibility: visible;
     z-index: 100;
+  }
+
+  .top-nav form input {
+    width: 135px;
+  }
+
+  .top-nav form {
+    padding: 0 10px;
   }
 
   .pagination-inner {
