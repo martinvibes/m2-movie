@@ -15,6 +15,11 @@ body {
 .top-nav a {
   text-decoration: none;
   color: whitesmoke;
+  transition: 0.4s;
+}
+
+.top-nav a:hover {
+  color: rgb(68, 199, 68);
 }
 
 .upper {
@@ -29,7 +34,7 @@ body {
   background-color: rgb(45, 39, 122);
   z-index: 100;
   box-shadow: 0 2px 4px rgb(36, 141, 36);
-  padding: 10px 20px;
+  padding: 8px 20px;
   margin: 1px !important;
 }
 
@@ -46,6 +51,11 @@ body {
   background-color: rgb(12, 12, 66);
   padding: 2px;
   border-radius: 10px;
+  transition: 0.5s;
+}
+
+.top-nav form:hover {
+  transform: scale(1.1);
 }
 
 #form {
@@ -60,6 +70,7 @@ body {
   fill: green;
   height: 1.6rem;
   width: 1.6rem;
+  cursor: pointer;
 }
 
 .top-nav form input {
@@ -486,6 +497,10 @@ body {
     width: 150px;
   }
 
+  .top-nav form input::placeholder {
+    font-size: 12px;
+  }
+
   .type-of-movie input {
     margin-top: 10px;
   }
@@ -573,5 +588,40 @@ body {
     width: 1rem;
     fill: currentColor;
     margin: -3px 0;
+  }
+}
+
+@media (max-width: 310px) {
+  .top-nav {
+    display: block;
+    margin: 5px 0 15px;
+  }
+
+  .top-nav h1 {
+    text-align: left;
+    margin: 0 0 5px;
+  }
+
+  .top-nav form {
+    width: 100%;
+  }
+
+  .s-icon svg {
+    text-align: center;
+    border-left: 2px solid rgb(21, 21, 100);
+    padding-left: 3px;
+    fill: green;
+    margin-top: 4px;
+    height: 1.4rem;
+    width: 1.4rem;
+    cursor: pointer;
+  }
+
+  .top-nav span {
+    text-align: center;
+  }
+
+  .top-nav form input {
+    width: 100%;
   }
 }

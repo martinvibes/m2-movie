@@ -300,7 +300,7 @@ const suggestion = async function (value) {
     const data = await response.json();
 
     const datalist = document.getElementById("suggestions");
-    // Clear previous suggestions
+    // Clear the previous suggestions
     datalist.innerHTML = "";
     data.results.forEach((suggest) => {
       const option = document.createElement("option");
