@@ -169,6 +169,14 @@ body {
   margin-bottom: 20px;
 }
 
+.section_review {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
 .see-more {
   color: white;
   transition: 0.3s;
@@ -306,7 +314,7 @@ body {
   font-weight: 600;
   border: none;
   background-color: #f9f5f3;
-  padding: 0.5rem 0.8rem;
+  padding: 0.4rem 0.7rem;
   border-radius: 1rem;
   cursor: pointer;
 
@@ -408,7 +416,7 @@ body {
     justify-content: center;
     align-items: center;
     /* flex-direction: column; */
-    overflow: scroll;
+    /* overflow: scroll; */
   }
 
   .reviews-page img {
@@ -460,32 +468,41 @@ body {
     flex-direction: column;
   }
 
+  .section_review {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    width: 120%;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+
   .reviews-page img {
-    width: 260px;
-    height: 300px;
+    width: 100%;
+    height: auto;
   }
 
   .reviews-page p {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .reviews-page h4 {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .top-nav h1 {
-    font-size: 15px;
+    font-size: 13px;
   }
 
   .reviews h1 {
-    font-size: 22px;
+    font-size: 14px;
     margin: -15px 0 7px;
   }
 }
 
 @media (max-width: 395px) {
   .top-nav h1 {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .top-nav form {
@@ -571,8 +588,8 @@ body {
   }
 
   .btn--inline {
-    font-size: 0.8rem;
-    padding: 0.5rem 1rem;
+    font-size: 0.6rem;
+    padding: 0.4rem 0.7rem;
     border-radius: 0.7rem;
     cursor: pointer;
 
@@ -580,7 +597,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.5s;
-    margin: 0 10px;
+    margin: 0 0 0 20px;
   }
 
   .btn--inline svg {
