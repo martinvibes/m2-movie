@@ -60,6 +60,7 @@ const getMainMovie = function (url) {
                 ? `https://image.tmdb.org/t/p/w500${known.poster_path}`
                 : "./img/far-away.jpg"
             }" alt="${known.title}" />
+            <div class='vote-container'>
               <p>Title: ${
                 known.title && known.title.split(" ").length > 20
                   ? known.title
@@ -67,6 +68,10 @@ const getMainMovie = function (url) {
                   ? known.title.substring(0, 20) + "..."
                   : known.title || known.name
               }</p>
+              <span class='${vote(
+                known.vote_average
+              )}'>${known.vote_average.toFixed(1)}</span>
+              </div>
               <h4>Release date: ${
                 known.release_date ? known.release_date : "Not available"
               }</h4>
@@ -192,6 +197,7 @@ const getMovieBy = function (url) {
                   ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                   : "./img/far-away.jpg"
               }" alt="poster of a movie" />
+               <div class='vote-container'>
                 <h3>Title: ${
                   movie.title && movie.title.split(" ").length > 20
                     ? movie.title
@@ -199,6 +205,10 @@ const getMovieBy = function (url) {
                     ? movie.title.substring(0, 20) + "..."
                     : movie.title || movie.name
                 }</h3>
+                <span class='${vote(
+                  movie.vote_average
+                )}'>${movie.vote_average.toFixed(1)}</span>
+                </div>
                 <h4>Release date: ${
                   movie && movie.release_date
                     ? movie.release_date
@@ -230,6 +240,16 @@ const getMovieBy = function (url) {
     })
     .catch((err) => console.error(err));
 };
+
+function vote(vote) {
+  if (vote >= 8) {
+    return "green";
+  } else if (vote >= 5) {
+    return "yellow";
+  } else {
+    return "red";
+  }
+}
 
 const summitSearch = (e) => {
   e.preventDefault();
@@ -343,12 +363,12 @@ window.addEventListener("scroll", () => {
   const navLink = document.querySelector(".nav-link");
   const scrollHeight = window.pageYOffset;
   const navHeight = topNav.getBoundingClientRect().height;
-  if (scrollHeight > navHeight) {
+  if (scrollHeight > navHeight + 200) {
     topNav.classList.add("fixed-nav");
   } else {
     topNav.classList.remove("fixed-nav");
   }
-  if (scrollHeight > 500) {
+  if (scrollHeight > 550) {
     navLink.classList.add("show-link");
   } else {
     navLink.classList.remove("show-link");

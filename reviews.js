@@ -123,6 +123,11 @@ document.addEventListener("DOMContentLoaded", function () {
                <h4><span>Is movie for adult:</span> ${
                  !movieDetails.adult ? "for all age" : movieDetails.adult
                }</h4>
+               <h4 class='${vote(
+                 movieDetails.vote_average
+               )} vote_avg'><span> Vote Average:  </span> <i>${movieDetails.vote_average.toFixed(
+        2
+      )}</i></h4>
                <h4><span>Production companies:</span> ${movieDetails.production_companies
                  .map((comp) => comp.name)
                  .join(", ")}</h4>
@@ -147,6 +152,16 @@ document.addEventListener("DOMContentLoaded", function () {
       alert(error.message, error);
     });
 });
+
+function vote(vote) {
+  if (vote >= 8) {
+    return "green";
+  } else if (vote >= 5) {
+    return "yellow";
+  } else {
+    return "red";
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const backButton = document.getElementById("backButton");
