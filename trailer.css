@@ -1,0 +1,37 @@
+body {
+  background-color: rgba(5, 5, 31, 0.952);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.trailer-body {
+  position: relative;
+  padding: 15px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.blur-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff67;
+  backdrop-filter: blur(10px); /* Adjust blur intensity as needed */
+  z-index: -1;
+}
+
+.trailer-body h1 {
+  text-align: center;
+  margin: 10px 0px 15px;
+  color: #1d1b1bf3;
+}
+
+.trailer-body iframe {
+  border-radius: 7px;
+}

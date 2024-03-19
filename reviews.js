@@ -49,26 +49,12 @@ document.addEventListener("DOMContentLoaded", function () {
           // Get the first trailer (you can customize this logic as needed)
           const trailer = trailers[0];
           const trailerUrl = `https://www.youtube.com/embed/${trailer.key}`;
-
-          // Create a new HTML page for the trailer
-          const trailerPageHtml = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>Movie Trailer</title>
-            </head>
-            <body>
-              <h1>${data.title} Trailer</h1>
-              <iframe width="560" height="315" src="${trailerUrl}" frameborder="0" allowfullscreen></iframe>
-            </body>
-            </html>
-          `;
-
-          // Open the trailer page in a new tab
-          const trailerWindow = window.open("", "_blank");
-          trailerWindow.document.write(trailerPageHtml);
+          const trailerWindow = window.open(
+            `trailer.html?title=${encodeURIComponent(
+              data.title
+            )}&trailerUrl=${encodeURIComponent(trailerUrl)}`,
+            "_blank"
+          );
         } else {
           alert("No trailer found for this movie.");
         }
