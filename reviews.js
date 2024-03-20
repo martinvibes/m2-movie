@@ -117,10 +117,12 @@ document.addEventListener("DOMContentLoaded", function () {
                <h4><span>Production companies:</span> ${movieDetails.production_companies
                  .map((comp) => comp.name)
                  .join(", ")}</h4>
-               <h4><a href="${
-                 movieDetails.homepage
-               }" target="_blank">Link to the site</a></h4>
                <h4><a id="watchTrailer" href="#">Watch Trailer</a></h4>
+               <h4>${
+                 movieDetails.homepage
+                   ? `<a href="${movieDetails.homepage}" target="_blank">Link to the site</a>`
+                   : ""
+               }</h4>
                
            </div>
           </div>
