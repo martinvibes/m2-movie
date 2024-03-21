@@ -546,13 +546,13 @@ body {
     font-size: 18px;
   }
 
-  .top-nav form {
-    width: 150px;
+  .top-nav form input {
+    padding: 5px 5px 5px 10px;
+    width: 180px;
   }
 
-  .top-nav form input {
-    padding: 5px;
-    width: 150px;
+  .top-nav form {
+    width: 180px;
   }
 
   .top-nav form input::placeholder {
