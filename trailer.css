@@ -42,3 +42,21 @@ body {
 .trailer-body iframe {
   border-radius: 7px;
 }
+
+@media (max-width: 630px) {
+  .trailer-body iframe {
+    width: 500px;
+  }
+}
+
+@media (max-width: 550px) {
+  .trailer-body iframe {
+    width: 450px;
+  }
+}
+
+@media (max-width: 500px) {
+  .trailer-body iframe {
+    width: 100%;
+  }
+}
