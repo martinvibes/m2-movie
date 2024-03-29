@@ -632,6 +632,13 @@ body {
     width: 135px;
   }
 
+  .s-icon svg {
+    margin-right: -5px;
+    fill: green;
+    height: 1.7rem;
+    width: 1.7rem;
+  }
+
   .top-nav form {
     padding: 0 10px;
   }
