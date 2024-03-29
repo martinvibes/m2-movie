@@ -28,8 +28,8 @@ body {
   bottom: 0;
   width: 100%;
   height: 100%;
-  background-color: rgb(12, 12, 66);
-  backdrop-filter: blur(10px); /* Adjust blur intensity as needed */
+  background-color: gray;
+  filter: blur(5vw); /* Adjust blur intensity as needed */
   z-index: -1;
 }
 
