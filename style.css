@@ -250,11 +250,15 @@ body {
 }
 
 .error svg {
-  height: 3rem;
-  width: 3rem;
+  height: 2.5rem;
+  width: 2.5rem;
   fill: rgb(219, 63, 63);
   transform: translateY(-0.3rem);
-  margin-right: 15px;
+  margin-right: 10px;
+}
+
+.error p {
+  font-size: 18px;
 }
 
 .card {
@@ -495,13 +499,12 @@ body {
     /* height: 180px; */
   }
 
-    .nav-link {
-      font-size: 23px;
-      width: 1.9rem;
-      height: 1.9rem;
-    }
-    
+  .nav-link {
+    font-size: 23px;
+    width: 1.9rem;
+    height: 1.9rem;
   }
+}
 
 @media (max-width: 380px) {
   .reviews-page {
