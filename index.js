@@ -55,11 +55,15 @@ const getMainMovie = function (url) {
           .map((known) => {
             return `
             <div class="card">
-            <img src="${
+            <a href="reviews.html?id=${known.id}&title=${
+              known.title
+            }" data-movie-id="${known.id}">
+            <img class='card-image' src="${
               person && known.poster_path
                 ? `https://image.tmdb.org/t/p/w500${known.poster_path}`
                 : "./img/far-away.jpg"
             }" alt="${known.title}" />
+            </a>
             <div class='vote-container'>
               <p>Title: ${
                 known.title && known.title.split(" ").length > 20
@@ -192,11 +196,14 @@ const getMovieBy = function (url) {
         <div class="row">
             <div class="column">
               <div class="card">
-              <img src="${
+              <a href="reviews.html?id=${movie.id}&title=${
+          movie.title
+        }" data-movie-id="${movie.id}">
+              <img class='card-image' src="${
                 movie && movie.poster_path
                   ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                   : "./img/far-away.jpg"
-              }" alt="poster of a movie" />
+              }" alt="poster of a movie" /></a>
                <div class='vote-container'>
                 <h3>Title: ${
                   movie.title && movie.title.split(" ").length > 20

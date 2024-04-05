@@ -276,7 +276,7 @@ body {
   filter: hue-rotate(16deg);
 }
 
-.card img {
+.card-image {
   width: 250px;
   border-radius: 10px;
 }
